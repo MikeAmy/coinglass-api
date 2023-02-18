@@ -139,8 +139,10 @@ def endpoints(
                 }
         async def endpoint_function(
             session,
+            raw=False,
             rename_fields=True,
             remove_unused=True,
+            convert_data=True,
             timeout=30,
             **kwargs
         ):
@@ -161,6 +163,8 @@ def endpoints(
                 params=arguments,
                 timeout=30
             )
+            if raw:
+                return await response.text()
             response_json = await response.json()
             try:
                 success = response_json['success']
@@ -172,7 +176,7 @@ def endpoints(
                         f"{url}: Code {response_json['code']}: {response_json['msg']}"
                     )
             data = response_json["data"]
-            if convert:
+            if convert_data and convert:
                 data = convert(data, **kwargs)
             if remove_unused and remove:
                 data = map(remove_data, data)
