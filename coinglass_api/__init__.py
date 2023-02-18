@@ -1,3 +1,1 @@
-from .api import CoinglassAPI
-
-__all__ = ["CoinglassAPI"]
+from .api import CoinglassSession,  as_dataframe
